@@ -6,12 +6,13 @@ static int topbar = 1;                      /* -b  option; if 0, dmenu appears a
 static const char *fonts[] = {
 	"JetBrainsMonoMedium Nerd Font:size=10"
 };
-static const char *prompt      = NULL;      /* -p  option; prompt to the left of input field */
+static const char *prompt      = "";      /* -p  option; prompt to the left of input field */
 static const char *colors[SchemeLast][2] = {
 	/*     fg         bg       */
 	[SchemeNorm] = { "#F8F8F2", "#1B1D1E" },
 	[SchemeSel] = { "#1B1D1E", "#F8F8F2" },
 	[SchemeOut] = { "#000000", "#00ffff" },
+	[SchemeHp] = { "#F8F8F2", "#1B1D1E" }
 };
 /* -l option; if nonzero, dmenu uses vertical list with given number of lines */
 static unsigned int lines      = 0;

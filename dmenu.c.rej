@@ -1,55 +1,12 @@
---- config.def.h
-+++ config.def.h
-@@ -15,6 +15,9 @@ static const char *colors[SchemeLast][2] = {
- };
- /* -l option; if nonzero, dmenu uses vertical list with given number of lines */
- static unsigned int lines      = 0;
-+/* -h option; minimum height of a menu line */
-+static unsigned int lineheight = 0;
-+static unsigned int min_lineheight = 8;
- 
- /*
-  * Characters not considered part of a word while deleting words
---- dmenu.1
-+++ dmenu.1
-@@ -6,6 +6,8 @@ dmenu \- dynamic menu
- .RB [ \-bfiv ]
- .RB [ \-l
- .IR lines ]
-+.RB [ \-h
-+.IR height ]
- .RB [ \-m
- .IR monitor ]
- .RB [ \-p
-@@ -50,6 +52,9 @@ dmenu matches menu items case insensitively.
- .BI \-l " lines"
- dmenu lists items vertically, with the given number of lines.
- .TP
-+.BI \-h " height"
-+dmenu uses a menu line of at least 'height' pixels tall, but no less than 8.
-+.TP
- .BI \-m " monitor"
- dmenu is displayed on the monitor number supplied. Monitor numbers are starting
- from 0.
 --- dmenu.c
 +++ dmenu.c
-@@ -690,7 +691,7 @@ setup(void)
- static void
+@@ -728,7 +773,8 @@ static void
  usage(void)
  {
--	fputs("usage: dmenu [-bfiv] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
-+	fputs("usage: dmenu [-bfiv] [-l lines] [-h height] [-p prompt] [-fn font] [-m monitor]\n"
- 	      "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]\n", stderr);
+ 	fputs("usage: dmenu [-bfiv] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
+-	      "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]\n", stderr);
++	      "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]\n"
++		  "             [-hb color] [-hf color] [-hp items]\n", stderr);
  	exit(1);
  }
-@@ -718,6 +719,10 @@ main(int argc, char *argv[])
- 		/* these options take one argument */
- 		else if (!strcmp(argv[i], "-l"))   /* number of lines in vertical list */
- 			lines = atoi(argv[++i]);
-+		else if (!strcmp(argv[i], "-h")) { /* minimum height of one menu line */
-+			lineheight = atoi(argv[++i]);
-+			lineheight = MAX(lineheight, min_lineheight);
-+		}
- 		else if (!strcmp(argv[i], "-m"))
- 			mon = atoi(argv[++i]);
- 		else if (!strcmp(argv[i], "-p"))   /* adds prompt to left of input field */
+ 
